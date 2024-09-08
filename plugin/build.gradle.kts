@@ -5,11 +5,10 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-// TODO: Update value to your plugin's name.
-val pluginName = "GodotAndroidPluginTemplate"
+val pluginName = "GeolocationPlugin"
+val pluginVersion = 0.1
 
-// TODO: Update value to match your plugin's package name.
-val pluginPackageName = "org.godotengine.plugin.android.template"
+val pluginPackageName = "com.karimibrahim.godot.android.geolocation"
 
 android {
     namespace = pluginPackageName
@@ -20,11 +19,12 @@ android {
     }
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 28
 
         manifestPlaceholders["godotPluginName"] = pluginName
         manifestPlaceholders["godotPluginPackageName"] = pluginPackageName
         buildConfigField("String", "GODOT_PLUGIN_NAME", "\"${pluginName}\"")
+        buildConfigField("String", "GODOT_PLUGIN_VERSION", "\"${pluginVersion}\"")
         setProperty("archivesBaseName", pluginName)
     }
 
@@ -39,6 +39,8 @@ android {
 
 dependencies {
     implementation("org.godotengine:godot:4.2.0.stable")
+    implementation("androidx.core:core-ktx:1.13.1")
+//    implementation("com.google.android.gms:play-services-location:21.3.0")
     // TODO: Additional dependencies should be added to export_plugin.gd as well.
 }
 
