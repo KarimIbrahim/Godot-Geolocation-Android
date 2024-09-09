@@ -2,7 +2,7 @@
 An Android plugin for Godot to listen for the geolocation updates. The plugin is using the new Godot 4 plugin system. The plugin uses the Android `LocationManager` to eliminate the need for the Google Play Services.
 The implementation is kept simple to maintain a small and lightweight footprint. However, it can easily be extended to support other use cases. Contributions are welcome, please feel free to submit feedback, pull requests, or fork the project as needed.
 
-The plugin is generated from the [`Godot Android templates`](https://github.com/m4gr3d/Godot-Android-Plugin-Template) and is inspired by the great work of [`WolfBearGames Plugin`](https://github.com/WolfBearGames/Godot-GeolocationPlugin-Android``).
+The plugin is generated from the [`Godot Android templates`](https://github.com/m4gr3d/Godot-Android-Plugin-Template) and is inspired by the great work of [`WolfBearGames Plugin`](https://github.com/WolfBearGames/Godot-GeolocationPlugin-Android).
 
 ## Contents
 * The gradle project for Android plugin: [`plugin`](plugin)
@@ -14,24 +14,24 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
 **Note:** [Android Studio](https://developer.android.com/studio) is the recommended IDE for developing the Godot Android plugins.
 
 ### `I don't know what I'm doing` Guide
-1. Copy [`plugin/demo/addons/GeolocationPlugin`](plugin/demo/addons/GeolocationPlugin) directory under your Godo project `addons` directory
-2. Copy [`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd) to your scripts directory in your Godot's project
+1. Copy [`plugin/demo/addons/GeolocationPlugin`](plugin/demo/addons/GeolocationPlugin) directory under the `addons` directory in your Godot project
+2. Copy [`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd) to your scripts directory in your Godot project
 3. Create a `Node` in your scene and call it `AndroidGeolocationPlugin`
-4. Attach the `android_geolocation_plugin.gd` to the `AndroidGeolocationPlugin` node (Alternatively, you can experiment with `Globals`, however, I haven't tested that setup yet.)
+4. Attach the `android_geolocation_plugin.gd` to the `AndroidGeolocationPlugin` node (Alternatively, you can experiment with `Globals`, however, I haven't tested that setup yet)
 5. Reference the `AndroidGeolocationPlugin` in your GDScripts either by path, or by exports (e.g. `@export var android_plugin: AndroidGeolocationPlugin`)
 6. Create a listener for the geolocation updates:
-  ```
+  ```gdscript
   func _on_location_update(location_dictionary: Dictionary) -> void:
 	  var latitude: float = location_dictionary["latitude"]
 	  var longitude: float = location_dictionary["longitude"]
 	  log_label.text = str('Location Update: Latitude[', latitude, '], Longitude[', longitude, ']')
   ```
-7. In connect the plugin signal for the location update with the listener you just created in the `_ready()` method:
-  ```
+7. Connect the location update signal with the listener you just created in the `_ready()` method:
+  ```gdscript
   func _ready():
 	  android_plugin.android_location_updated.connect(self._on_location_update)
   ```
-8. Export your project using Android templates. Don't forget to check these 2 permissions under `Export window -> Options tab`:
+8. Export your project using the Android template. Don't forget to enable these 2 permissions under `Export window -> Options tab`:
   ```
   Access Coarse Location
   Access Fine Location
@@ -42,9 +42,9 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
 ### `Show me the secret sauce` Guide
 1. Start from the [`plugin/demo`](plugin/demo) project
 2. Open the project in Godot
-3. Navigate to [`plugin/demo/main.gd`](plugin/demo/main.gd). This is the entry point which uses the plugin wrapper ([`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd)) to communicate with the plugin
+3. Navigate to [`plugin/demo/main.gd`](plugin/demo/main.gd). This is the entry point which uses the plugin wrapper [`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd) to communicate with the plugin
 4. The plugin wrapper exposes the below methods and signals. This class is what you want to use in your project to call the plugin. Feel free to modify as need to suit your use-case:
-  ```
+  ```gdscript
   # Emitted when the user accepts/rejects the location permission request.
   signal android_location_permission_updated(granted: bool)
 
@@ -79,8 +79,8 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
 
   ```
 5. The Android plugin code is in [`GodotAndroidPlugin.kt`](plugin/src/main/java/com/karimibrahim/godot/android/geolocation/GodotAndroidPlugin.kt)
-6. The plugin uses the `LocationManager.FUSED_PROVIDER`. Location updates won't publish if the device does not have any available providers
-7. The plugin publishes permission and location updates asynchronously through 2 signals 
+6. The plugin uses the `LocationManager.FUSED_PROVIDER`. Location updates won't publish if the device does not have any available or enabled providers
+7. The plugin publishes permission and location updates asynchronously through 2 separate signals 
 8. All operations are idempotent
 9. Min SDK version is 28
 
