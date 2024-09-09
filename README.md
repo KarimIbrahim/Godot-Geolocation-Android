@@ -11,13 +11,13 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
 * A demo project to test the plugin: [`plugin/demo`](plugin/demo)
 
 ## Release
-You can find the latest binaries in the [`releases page`](releases/).
+You can find the latest binaries in the [`releases page`](https://github.com/KarimIbrahim/Godot-Geolocation-Android/releases).
 
 ## Usage
 **Note:** [Android Studio](https://developer.android.com/studio) is the recommended IDE for developing the Godot Android plugins.
 
 ### `I don't know what I'm doing` Guide
-1. Copy [`plugin/demo/addons/GeolocationPlugin`](plugin/demo/addons/GeolocationPlugin) directory under the `addons` directory in your Godot project. You can also download the latest binaries from the [`releases page`](releases/)
+1. Copy [`plugin/demo/addons/GeolocationPlugin`](plugin/demo/addons/GeolocationPlugin) directory under the `addons` directory in your Godot project. You can also download the latest binaries from the [`releases page`](https://github.com/KarimIbrahim/Godot-Geolocation-Android/releases)
 2. Copy [`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd) to your scripts directory in your Godot project
 3. Create a `Node` in your scene and call it `AndroidGeolocationPlugin`
 4. Attach the `android_geolocation_plugin.gd` to the `AndroidGeolocationPlugin` node (Alternatively, you can experiment with `Globals`, however, I haven't tested that setup yet)
@@ -90,7 +90,7 @@ You can find the latest binaries in the [`releases page`](releases/).
 
 
 ### Building the Android plugin
-- You don't technically need to build the plugin, unless you need to modify the gradle project. The pre-built binaries (aar) are included under the [`plugin/demo/addons/GeolocationPlugin/bin`](plugin/demo/addons/GeolocationPlugin/bin) and in the [`releases page`](releases/)
+- You don't technically need to build the plugin, unless you need to modify the gradle project. The pre-built binaries (aar) are included under the [`plugin/demo/addons/GeolocationPlugin/bin`](plugin/demo/addons/GeolocationPlugin/bin) and in the [`releases page`](https://github.com/KarimIbrahim/Godot-Geolocation-Android/releases)
 - In a terminal window, navigate to the project's root directory ([`Godot-Geolocation-Android`](Godot-Geolocation-Android)) and run the following command:
 ```
 ./gradlew assemble
