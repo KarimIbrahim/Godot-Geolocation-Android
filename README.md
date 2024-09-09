@@ -10,33 +10,37 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
 * A wrapper/helper class to work with the plugin in GDScript: [`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd)
 * A demo project to test the plugin: [`plugin/demo`](plugin/demo)
 
+## Release
+You can find the latest binaries in the [`releases page`](releases/).
+
 ## Usage
 **Note:** [Android Studio](https://developer.android.com/studio) is the recommended IDE for developing the Godot Android plugins.
 
 ### `I don't know what I'm doing` Guide
-1. Copy [`plugin/demo/addons/GeolocationPlugin`](plugin/demo/addons/GeolocationPlugin) directory under the `addons` directory in your Godot project
+1. Copy [`plugin/demo/addons/GeolocationPlugin`](plugin/demo/addons/GeolocationPlugin) directory under the `addons` directory in your Godot project. You can also download the latest binaries from the [`releases page`](releases/)
 2. Copy [`plugin/demo/android_geolocation_plugin.gd`](plugin/demo/android_geolocation_plugin.gd) to your scripts directory in your Godot project
 3. Create a `Node` in your scene and call it `AndroidGeolocationPlugin`
 4. Attach the `android_geolocation_plugin.gd` to the `AndroidGeolocationPlugin` node (Alternatively, you can experiment with `Globals`, however, I haven't tested that setup yet)
-5. Reference the `AndroidGeolocationPlugin` in your GDScripts either by path, or by exports (e.g. `@export var android_plugin: AndroidGeolocationPlugin`)
-6. Create a listener for the geolocation updates:
+5. Reference the `AndroidGeolocationPlugin` in your GDScripts either by path, or through an export e.g. `@export var android_plugin: AndroidGeolocationPlugin`
+6. Connect the `AndroidGeolocationPlugin` node with your exported variable
+7. Create a listener for the geolocation updates in your script:
   ```gdscript
   func _on_location_update(location_dictionary: Dictionary) -> void:
 	  var latitude: float = location_dictionary["latitude"]
 	  var longitude: float = location_dictionary["longitude"]
 	  log_label.text = str('Location Update: Latitude[', latitude, '], Longitude[', longitude, ']')
   ```
-7. Connect the location update signal with the listener you just created in the `_ready()` method:
+8. Connect the location update signal with the listener you just created in the `_ready()` method:
   ```gdscript
   func _ready():
 	  android_plugin.android_location_updated.connect(self._on_location_update)
   ```
-8. Export your project using the Android template. Don't forget to enable these 2 permissions under `Export window -> Options tab`:
+9. Export your project using the Android template. Don't forget to enable these 2 permissions under `Export window -> Options tab`:
   ```
   Access Coarse Location
   Access Fine Location
   ```
-9. Have fun!!
+10. Have fun!!
 
 
 ### `Show me the secret sauce` Guide
@@ -55,7 +59,7 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
   signal android_location_updated(location_dictionary: Dictionary)
 
 
-  # Pings the plugin the returns its name and version.
+  # Pings the plugin and returns its name and version.
   func _ping() -> String
 
   # Returns true if location permissions are granted.
@@ -86,7 +90,7 @@ The plugin is generated from the [`Godot Android templates`](https://github.com/
 
 
 ### Building the Android plugin
-- You don't technically need to build the plugin, unless you need to modify the gradle project. The pre-built binaries (aar) are included under the [`plugin/demo/addons/GeolocationPlugin/bin`](plugin/demo/addons/GeolocationPlugin/bin)
+- You don't technically need to build the plugin, unless you need to modify the gradle project. The pre-built binaries (aar) are included under the [`plugin/demo/addons/GeolocationPlugin/bin`](plugin/demo/addons/GeolocationPlugin/bin) and in the [`releases page`](releases/)
 - In a terminal window, navigate to the project's root directory ([`Godot-Geolocation-Android`](Godot-Geolocation-Android)) and run the following command:
 ```
 ./gradlew assemble

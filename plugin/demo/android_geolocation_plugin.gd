@@ -41,7 +41,7 @@ func _ready():
 		printerr("Couldn't find plugin " + _plugin_name)
 
 
-# Pings the plugin the returns its name and version.
+# Pings the plugin and returns its name and version.
 func _ping() -> String:
 	if _android_plugin:
 		return _android_plugin.ping()
