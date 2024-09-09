@@ -1,11 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cg3hylang5fxn"]
+[gd_scene load_steps=3 format=3 uid="uid://cg3hylang5fxn"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_j0gfq"]
+[ext_resource type="Script" path="res://android_geolocation_plugin.gd" id="2_pot3o"]
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("log_label", "geolocation_status_label")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("log_label", "geolocation_status_label", "android_plugin")]
 script = ExtResource("1_j0gfq")
 log_label = NodePath("LogLabel")
 geolocation_status_label = NodePath("GeolocationStatusLabel")
+android_plugin = NodePath("AndroidGeolocationPlugin")
 
 [node name="PingButton" type="Button" parent="."]
 anchors_preset = 14
@@ -85,6 +87,9 @@ offset_right = 772.0
 offset_bottom = 585.0
 theme_override_font_sizes/font_size = 30
 text = "Hello"
+
+[node name="AndroidGeolocationPlugin" type="Node" parent="."]
+script = ExtResource("2_pot3o")
 
 [connection signal="pressed" from="PingButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="PermissionButton" to="." method="_on_permission_button_pressed"]

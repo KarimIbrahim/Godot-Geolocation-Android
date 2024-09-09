@@ -88,6 +88,10 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
     @UsedByGodot
     @SuppressLint("MissingPermission")
     fun startGeolocationListener(minTimeMs: Long, minDistanceM: Float): Boolean {
+        if(!hasLocationPermission()) {
+            return false
+        }
+
         if (!isListeningForGeolocationUpdates) {
             isListeningForGeolocationUpdates = true
             locationManager.requestLocationUpdates(
@@ -98,6 +102,7 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
                 Looper.getMainLooper()
             )
         }
+
         return isListeningForGeolocationUpdates
     }
 
