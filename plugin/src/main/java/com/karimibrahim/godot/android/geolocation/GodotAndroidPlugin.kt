@@ -15,7 +15,11 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 
-
+/**
+ * A Godot plugin that listens for Geolocation updates.
+ * The plugins uses the [LocationManager.FUSED_PROVIDER] which combines inputs from several
+ * other location providers to provide the best possible location fix.
+ */
 class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
 
     companion object {
@@ -46,7 +50,8 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
         locationUpdateSignal
     )
 
-    private fun logInfo(output: String) = Log.i(pluginName, output)
+    private fun logInfo(log: String) = Log.i(pluginName, log)
+    private fun logError(log: String, ex: Throwable? = null) = Log.e(pluginName, log, ex)
 
     /*
     A tester method to make sure the plugin is wired correctly and can be called
@@ -59,13 +64,22 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
         return pingString
     }
 
+    /**
+     * Returns the current state of the location.
+     */
     @UsedByGodot
     fun isLocationEnabled() = locationManager.isLocationEnabled
 
+    /**
+     * Returns the current status of the [LocationManager.FUSED_PROVIDER].
+     */
     @UsedByGodot
     fun isLocationProviderEnabled() =
         locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER)
 
+    /**
+     * Checks if the location permission is granted.
+     */
     @UsedByGodot
     fun hasLocationPermission() = ActivityCompat.checkSelfPermission(
         activity!!.applicationContext,
@@ -75,6 +89,11 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
+    /**
+     * Will ask the user for location permission if it is not granted.
+     * The method returns immediately and the permission operation executes asynchronously.
+     * The result of operations will be published on the [locationPermissionSignal] after the user accepts/rejects the request.
+     */
     @UsedByGodot
     fun requestLocationPermission() = ActivityCompat.requestPermissions(
         activity!!,
@@ -82,30 +101,52 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
         LOCATION_PERMISSION_REQUEST_CODE
     )
 
+    /**
+     * Returns [true] if the plugin is listening for the geolocation updates.
+     * Will return [false] otherwise.
+     */
     @UsedByGodot
     fun isListeningForGeolocationUpdates() = isListeningForGeolocationUpdates
 
+    /**
+     * Starts the geolocation listener.
+     * Will publish the geolocation updates on the [locationUpdateSignal]. The signal will contain
+     * a dictionary with 2 keys `latitude` and `longitude`. Both values are of type [Double].
+     *
+     * The method will return true if the location permission is granted and the listener has started successfully.
+     * Calling this method repeatedly will not restart the listener if it is already running.
+     *
+     * The method will return false if the location permission is not granted, or the listener failed to start.
+     */
     @UsedByGodot
     @SuppressLint("MissingPermission")
     fun startGeolocationListener(minTimeMs: Long, minDistanceM: Float): Boolean {
-        if(!hasLocationPermission()) {
+        if (!hasLocationPermission()) {
             return false
         }
 
         if (!isListeningForGeolocationUpdates) {
             isListeningForGeolocationUpdates = true
-            locationManager.requestLocationUpdates(
-                LocationManager.FUSED_PROVIDER,
-                minTimeMs,
-                minDistanceM,
-                locationListener,
-                Looper.getMainLooper()
-            )
+            runCatching {
+                locationManager.requestLocationUpdates(
+                    LocationManager.FUSED_PROVIDER,
+                    minTimeMs,
+                    minDistanceM,
+                    locationListener,
+                    Looper.getMainLooper()
+                )
+            }.getOrElse {
+                logError("Failed to start the geolocation listener.", it)
+                return false
+            }
         }
 
         return isListeningForGeolocationUpdates
     }
 
+    /**
+     * Will stop the geolocation listener if it is running.
+     */
     @UsedByGodot
     fun stopGeolocationListener() {
         if (isListeningForGeolocationUpdates) {
